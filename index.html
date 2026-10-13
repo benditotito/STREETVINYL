@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0c0d">
+<title>STREETVINYL | Make Your Mark</title>
+<style>
+:root{
+  --bg:#0b0c0d;--panel:#17191b;
+  --lime:#c5ff35;--white:#f7f7f7;
+  --muted:#a5a7a9
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);
+  color:var(--white);font-family:Arial,sans-serif
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+header{
+  background:#090a0bf5;position:sticky;top:0;
+  z-index:20;border-bottom:1px solid #333
+}
+.nav{
+  max-width:1400px;margin:auto;padding:18px 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:20px
+}
+.logo{
+  font-size:27px;font-weight:1000;
+  font-style:italic;letter-spacing:-1.5px
+}
+.logo span{color:var(--lime)}
+nav{display:flex;gap:22px}
+nav a:hover{color:var(--lime)}
+.actions{display:flex;gap:12px;align-items:center}
+.cart-btn,.menu-btn{
+  border:1px solid #444;background:#171717;
+  color:white;border-radius:8px;padding:10px 14px
+}
+.cart-btn b{color:var(--lime)}
+.menu-btn{display:none}
+.hero{
+  min-height:510px;display:flex;align-items:center;
+  padding:75px 6%;position:relative;
+  background:
+    linear-gradient(90deg,#090909 5%,#090909b8 55%,#09090955),
+    url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=85")
+    center/cover
+}
+.hero-content{max-width:720px;position:relative}
+.eyebrow{
+  color:var(--lime);letter-spacing:4px;
+  font-size:12px;font-weight:bold
+}
+h1{
+  font-size:clamp(42px,6vw,88px);
+  line-height:.98;letter-spacing:-3px;
+  margin:20px 0;text-transform:uppercase
+}
+h1 span{color:var(--lime)}
+.hero p{
+  font-size:19px;color:#ddd;line-height:1.5;
+  max-width:530px
+}
+.btn{
+  background:var(--lime);color:#080808;
+  border:0;padding:15px 25px;
+  border-radius:5px;font-weight:900;
+  display:inline-block
+}
+.btn:hover{background:#dcff87}
+.btn-outline{
+  border:1px solid #555;background:transparent;
+  color:white;padding:13px;border-radius:5px
+}
+.benefits{
+  background:#141516;display:flex;
+  justify-content:center;gap:50px;
+  padding:22px;flex-wrap:wrap;
+  font-size:13px;font-weight:bold
+}
+.benefits span{color:var(--lime)}
+.container{max-width:1400px;margin:auto;padding:60px 5%}
+.section-title{
+  font-size:clamp(27px,4vw,42px);
+  text-transform:uppercase;margin:0 0 12px;
+  letter-spacing:-1px
+}
+.sub{color:var(--muted);margin-bottom:30px}
+.categories{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:18px
+}
+.category{
+  height:210px;border:1px solid #444;
+  border-radius:9px;overflow:hidden;position:relative;
+  background-size:cover;background-position:center;
+  display:flex;align-items:end;padding:24px;
+  cursor:pointer
+}
+.category:before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,#000e,#0001)
+}
+.category h3{position:relative;font-size:27px;margin:0}
+.category:hover{border-color:var(--lime)}
+.toolbar{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:15px;flex-wrap:wrap;
+  margin:30px 0
+}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filter{
+  background:#191a1c;color:white;
+  border:1px solid #383838;
+  border-radius:5px;padding:10px 17px
+}
+.filter.active{
+  background:var(--lime);color:black;
+  border-color:var(--lime);font-weight:bold
+}
+.search{
+  background:#191a1c;color:white;
+  border:1px solid #444;border-radius:5px;
+  padding:12px;min-width:210px
+}
+.products{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px
+}
+.product{
+  background:var(--panel);border:1px solid #303234;
+  border-radius:9px;overflow:hidden;
+  transition:transform .2s,border-color .2s
+}
+.product:hover{
+  transform:translateY(-4px);
+  border-color:var(--lime)
+}
+.product-image{
+  width:100%;aspect-ratio:4/3;
+  object-fit:cover;background:#262626
+}
+.product-info{padding:17px}
+.product-tag{
+  font-size:10px;color:var(--lime);
+  letter-spacing:2px;text-transform:uppercase
+}
+.product h3{font-size:16px;margin:10px 0}
+.product p{font-size:12px;color:var(--muted)}
+.price{font-size:22px;font-weight:bold;margin:14px 0}
+.product-actions{display:flex;gap:8px}
+.product-actions button{flex:1;font-size:12px}
+select{
+  background:#222;color:white;
+  border:1px solid #555;border-radius:5px;
+  padding:11px;width:100%;margin:5px 0 10px
+}
+.empty{color:#aaa;padding:30px;text-align:center}
+.cart-overlay{
+  display:none;position:fixed;inset:0;
+  background:#000a;z-index:29
+}
+.cart-overlay.open{display:block}
+.cart{
+  position:fixed;right:0;top:0;height:100%;
+  width:min(440px,100%);background:#161719;
+  z-index:30;transform:translateX(110%);
+  transition:transform .25s;padding:25px;
+  overflow-y:auto;box-shadow:-10px 0 40px #0007
+}
+.cart.open{transform:translateX(0)}
+.cart-head{
+  display:flex;align-items:center;
+  justify-content:space-between
+}
+.cart-item{
+  display:flex;justify-content:space-between;
+  gap:12px;padding:18px 0;
+  border-bottom:1px solid #333
+}
+.cart-item small{color:#aaa}
+.remove{
+  color:#ff8585;background:none;border:0;
+  font-size:12px
+}
+.cart-total{
+  display:flex;justify-content:space-between;
+  font-size:23px;font-weight:bold;margin:25px 0
+}
+.notice{
+  padding:15px;background:#29261a;
+  border:1px solid #66562a;
+  border-radius:7px;color:#f4dda0;
+  font-size:13px;line-height:1.5
+}
+footer{
+  background:#141516;padding:55px 6%;
+  border-top:1px solid #333
+}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr;
+  gap:30px;max-width:1300px;margin:auto
+}
+footer p,footer a{color:#aaa;line-height:1.8}
+footer a{display:block}
+footer a:hover{color:var(--lime)}
+.copyright{
+  text-align:center;border-top:1px solid #333;
+  padding-top:25px;margin-top:40px;
+  font-size:12px;color:#888
+}
+.toast{
+  position:fixed;bottom:25px;left:50%;
+  transform:translateX(-50%);
+  background:var(--lime);color:black;
+  padding:14px 24px;border-radius:6px;
+  font-weight:bold;display:none;z-index:50
+}
+@media(max-width:1050px){
+  .products{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:750px){
+  .menu-btn{display:block}
+  nav{
+    display:none;position:absolute;top:68px;
+    left:0;right:0;background:#101010;
+    padding:22px;flex-direction:column
+  }
+  nav.open{display:flex}
+  .nav{padding:15px}
+  .logo{font-size:22px}
+  .hero{min-height:450px}
+  .hero h1{letter-spacing:-1px}
+  .categories{grid-template-columns:1fr}
+  .category{height:170px}
+  .products{grid-template-columns:repeat(2,1fr);gap:10px}
+  .product-info{padding:12px}
+  .product h3{font-size:14px}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media(max-width:380px){
+  .products{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="nav">
+  <a href="#" class="logo">STREET<span>VINYL.</span></a>
+  <nav id="nav">
+   <a href="#">Inicio</a>
+   <a href="#catalogo" onclick="setCategory('todos')">Tienda</a>
+   <a href="#catalogo" onclick="setCategory('coches')">Coches</a>
+   <a href="#catalogo" onclick="setCategory('motos')">Motos</a>
+   <a href="#catalogo" onclick="setCategory('cascos')">Cascos</a>
+  </nav>
+  <div class="actions">
+   <button class="cart-btn" onclick="openCart()">
+    🛒 <b id="cartCount">0</b>
+   </button>
+   <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  </div>
+ </div>
+</header>
+
+<section class="hero">
+ <div class="hero-content">
+  <div class="eyebrow">DROP 001 — DISEÑOS ORIGINALES</div>
+  <h1>HAZ QUE TU<br>VEHÍCULO<br><span>HABLE POR TI.</span></h1>
+  <p>Vinilos originales para coches, motos y cascos.
+  Diseños urbanos para quienes no quieren pasar desapercibidos.</p>
+  <a href="#catalogo" class="btn">EXPLORAR CATÁLOGO →</a>
+ </div>
+</section>
+
+<div class="benefits">
+ <div><span>◆</span> DISEÑOS ORIGINALES</div>
+ <div><span>◆</span> ESTÉTICA STREET RACING</div>
+ <div><span>◆</span> FABRICACIÓN BAJO PEDIDO</div>
+</div>
+
+<section class="container">
+ <h2 class="section-title">ELIGE TU ESTILO.</h2>
+ <p class="sub">Una colección. Tres formas de destacar.</p>
+ <div class="categories">
+  <div class="category" onclick="goCategory('coches')"
+   style="background-image:url('https://images.unsplash.com/photo-1493238792000-8113da705763?w=900&q=85')">
+   <h3>COCHES ↗</h3>
+  </div>
+  <div class="category" onclick="goCategory('motos')"
+   style="background-image:url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=900&q=85')">
+   <h3>MOTOS ↗</h3>
+  </div>
+  <div class="category" onclick="goCategory('cascos')"
+   style="background-image:linear-gradient(120deg,#151515,#414141)">
+   <h3>CASCOS ↗</h3>
+  </div>
+ </div>
+</section>
+
+<section class="container" id="catalogo">
+ <div class="eyebrow">STREETVINYL COLLECTION</div>
+ <h2 class="section-title">DROP 001.</h2>
+ <p class="sub">20 conceptos originales para tu próxima transformación.</p>
+
+ <div class="toolbar">
+  <div class="filters">
+   <button class="filter active" data-cat="todos" onclick="setCategory('todos')">Todos</button>
+   <button class="filter" data-cat="coches" onclick="setCategory('coches')">Coches</button>
+   <button class="filter" data-cat="motos" onclick="setCategory('motos')">Motos</button>
+   <button class="filter" data-cat="cascos" onclick="setCategory('cascos')">Cascos</button>
+  </div>
+  <input class="search" id="search" placeholder="Buscar diseños..." oninput="renderProducts()">
+ </div>
+
+ <div class="products" id="products"></div>
+</section>
+
+<footer>
+ <div class="footer-grid">
+  <div>
+   <div class="logo">STREET<span>VINYL.</span></div>
+   <p>MAKE YOUR MARK.</p>
+   <p>Vinilos originales inspirados en la cultura urbana y el mundo del motor.</p>
+  </div>
+  <div>
+   <h3>EXPLORAR</h3>
+   <a href="#catalogo">Todos los vinilos</a>
+   <a href="#catalogo" onclick="setCategory('coches')">Coches</a>
+   <a href="#catalogo" onclick="setCategory('motos')">Motos</a>
+   <a href="#catalogo" onclick="setCategory('cascos')">Cascos</a>
+  </div>
+  <div>
+   <h3>INFORMACIÓN</h3>
+   <p>Contacto: pendiente de configurar</p>
+   <p>Envíos y devoluciones: pendiente</p>
+   <p>Aviso legal y privacidad: pendiente</p>
+  </div>
+ </div>
+ <div class="copyright">
+  © <span id="year"></span> STREETVINYL. Catálogo de demostración.
+ </div>
+</footer>
+
+<div class="cart-overlay" id="overlay" onclick="closeCart()"></div>
+<aside class="cart" id="cart">
+ <div class="cart-head">
+  <h2>TU CARRITO</h2>
+  <button class="btn-outline" onclick="closeCart()">✕</button>
+ </div>
+ <div id="cartItems"></div>
+ <div class="cart-total">
+  <span>Total</span>
+  <span id="cartTotal">0,00 €</span>
+ </div>
+ <div class="notice">
+  Tienda en desarrollo. Los precios son orientativos.
+  Los pagos y pedidos reales todavía no están habilitados.
+ </div>
+ <button class="btn" style="width:100%;margin-top:20px"
+  onclick="alert('Próximamente: compra online con Stripe.')">
+  FINALIZAR COMPRA
+ </button>
+</aside>
+
+<div class="toast" id="toast">Producto añadido al carrito</div>
+
+<script>
+const photos={
+ coches:[
+ "photo-1493238792000-8113da705763",
+ "photo-1503376780353-7e6692767b70",
+ "photo-1507136566006-cfc505b114fc",
+ "photo-1549317661-bd32c8ce0db2",
+ "photo-1494905998402-395d579af36f",
+ "photo-1502161254066-6c74afbf7e8b"
+ ],
+ motos:[
+ "photo-1558981806-ec527fa84c39",
+ "photo-1568772585407-9361f9bf3a87",
+ "photo-1558980394-0c7c9299fe96",
+ "photo-1449426468159-d96dbf08f19f"
+ ]
+};
+
+// Fotografías de referencia, no imágenes de los vinilos reales.
+// Sustituir por assets/productos/01.webp, etc. antes de vender.
+const raw=[
+ ["Urban Flow","coches",24.90],
+ ["Nitro Stripes","coches",22.90],
+ ["Shadow Run","coches",26.90],
+ ["Racing Grid","coches",24.90],
+ ["Vortex","coches",29.90],
+ ["Minimal Race","coches",14.90],
+ ["Blaze","coches",29.90],
+ ["Skull Track","coches",27.90],
+ ["Urban Camo","coches",29.90],
+ ["Honeycomb","coches",26.90],
+ ["Splatter","coches",24.90],
+ ["Stealth","coches",22.90],
+ ["Race Bolt","motos",19.90],
+ ["Firestorm","motos",21.90],
+ ["Neon Shift","motos",21.90],
+ ["Steel Line","motos",24.90],
+ ["Phantom","cascos",12.90],
+ ["Blaze Helmet","cascos",14.90],
+ ["Pixel","cascos",9.90],
+ ["Neon Core","cascos",14.90]
+];
+
+const products=raw.map((r,i)=>({
+ id:i+1,name:r[0],category:r[1],price:r[2],
+ image:r[1]==="cascos" ? "" :
+ "https://images.unsplash.com/"+
+ photos[r[1]][
+ (r[1]==="coches"?i:i-12)%photos[r[1]].length
+ ]+"?w=800&q=85"
+}));
+
+let category="todos";
+let cart=JSON.parse(localStorage.getItem("sv_cart")||"[]");
+
+function money(n){
+ return n.toLocaleString("es-ES",{
+  style:"currency",currency:"EUR"
+ });
+}
+
+function placeholder(name){
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+ <rect width="800" height="600" fill="#202224"/>
+ <path d="M0 500L700 0M120 600L800 100" stroke="#c5ff35" stroke-width="35" opacity=".4"/>
+ <text x="50%" y="46%" fill="#c5ff35" font-size="55" font-family="Arial" font-weight="bold" text-anchor="middle">STREETVINYL.</text>
+ <text x="50%" y="58%" fill="white" font-size="28" font-family="Arial" text-anchor="middle">${name}</text>
+ <text x="50%" y="68%" fill="#aaa" font-size="19" font-family="Arial" text-anchor="middle">IMAGEN PENDIENTE</text>
+ </svg>`;
+ return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+}
+
+function setCategory(cat){
+ category=cat;
+ document.querySelectorAll(".filter").forEach(b=>{
+  b.classList.toggle("active",b.dataset.cat===cat);
+ });
+ renderProducts();
+}
+
+function goCategory(cat){
+ setCategory(cat);
+ document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
+}
+
+function renderProducts(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=products.filter(p=>
+  (category==="todos"||p.category===category)&&
+  p.name.toLowerCase().includes(q)
+ );
+ const root=document.getElementById("products");
+ if(!list.length){
+  root.innerHTML='<p class="empty">No se encontraron productos.</p>';
+  return;
+ }
+ root.innerHTML=list.map(p=>`
+ <article class="product">
+  <img class="product-image"
+   src="${p.image||placeholder(p.name)}"
+   alt="Referencia visual de ${p.name}"
+   loading="lazy"
+   onerror="this.onerror=null;this.src=placeholder('${p.name}')">
+  <div class="product-info">
+   <div class="product-tag">${p.category} · DROP 001</div>
+   <h3>${String(p.id).padStart(2,"0")}. ${p.name}</h3>
+   <p>Diseño conceptual STREETVINYL</p>
+   <div class="price">${money(p.price)}</div>
+   <label for="size-${p.id}" style="font-size:12px;color:#aaa">Tamaño</label>
+   <select id="size-${p.id}">
+    <option value="Pequeño">Pequeño</option>
+    <option value="Mediano">Mediano</option>
+    <option value="Grande">Grande</option>
+   </select>
+   <div class="product-actions">
+    <button class="btn" onclick="addCart(${p.id})">
+     AÑADIR +
+    </button>
+   </div>
+  </div>
+ </article>`).join("");
+}
+
+function addCart(id){
+ const p=products.find(x=>x.id===id);
+ const size=document.getElementById("size-"+id).value;
+ const found=cart.find(x=>x.id===id&&x.size===size);
+ if(found)found.qty++;
+ else cart.push({id,size,qty:1});
+ saveCart();
+ const t=document.getElementById("toast");
+ t.style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>t.style.display="none",2000);
+}
+
+function saveCart(){
+ localStorage.setItem("sv_cart",JSON.stringify(cart));
+ renderCart();
+}
+
+function renderCart(){
+ document.getElementById("cartCount").textContent=
+ cart.reduce((n,x)=>n+x.qty,0);
+ let total=0;
+ document.getElementById("cartItems").innerHTML=
+ cart.length?cart.map((item,index)=>{
+  const p=products.find(x=>x.id===item.id);
+  if(!p)return "";
+  total+=p.price*item.qty;
+  return `<div class="cart-item">
+   <div>
+    <strong>${p.name}</strong><br>
+    <small>${item.size} · Cantidad: ${item.qty}</small><br>
+    <small>${money(p.price*item.qty)}</small>
+   </div>
+   <button class="remove" onclick="removeCart(${index})">Eliminar</button>
+  </div>`;
+ }).join(""):'<p class="sub">Tu carrito está vacío.</p>';
+ document.getElementById("cartTotal").textContent=money(total);
+}
+
+function removeCart(index){
+ cart.splice(index,1);
+ saveCart();
+}
+
+function openCart(){
+ document.getElementById("cart").classList.add("open");
+ document.getElementById("overlay").classList.add("open");
+}
+function closeCart(){
+ document.getElementById("cart").classList.remove("open");
+ document.getElementById("overlay").classList.remove("open");
+}
+function toggleMenu(){
+ document.getElementById("nav").classList.toggle("open");
+}
+document.getElementById("year").textContent=new Date().getFullYear();
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
